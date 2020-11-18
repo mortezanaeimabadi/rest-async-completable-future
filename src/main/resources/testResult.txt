@@ -1,0 +1,33 @@
+12:14:37.232 [http-nio-9191-exec-1] Initializing Spring FrameworkServlet 'dispatcherServlet'
+12:14:37.232 [http-nio-9191-exec-1] FrameworkServlet 'dispatcherServlet': initialization started
+12:14:37.240 [http-nio-9191-exec-1] FrameworkServlet 'dispatcherServlet': initialization completed in 8 ms
+12:14:37.253 [http-nio-9191-exec-1] Request received in controller thread:http-nio-9191-exec-1
+12:14:37.254 [http-nio-9191-exec-1] No TaskExecutor bean found for async processing
+12:14:37.258 [http-nio-9191-exec-1] Request done in controller thread:http-nio-9191-exec-1
+12:14:37.262 [SimpleAsyncTaskExecutor-1] Request received in @Async : SimpleAsyncTaskExecutor-1
+12:14:37.262 [SimpleAsyncTaskExecutor-1] Start reversing string
+12:14:37.262 [SimpleAsyncTaskExecutor-1] Completed reversing string
+12:14:37.262 [SimpleAsyncTaskExecutor-1] Request done in @Async: SimpleAsyncTaskExecutor-1
+
+----------------------------------------------------------------------------
+12:15:41.705 [http-nio-9191-exec-1] Request received in controller thread:http-nio-9191-exec-1
+12:15:41.711 [http-nio-9191-exec-1] Request done in controller thread:http-nio-9191-exec-1
+12:15:41.712 [SimpleAsyncTaskExecutor-2] Request received in @Async : SimpleAsyncTaskExecutor-2
+12:15:41.713 [ForkJoinPool.commonPool-worker-1] Start reversing string
+12:15:41.713 [ForkJoinPool.commonPool-worker-1] Completed reversing string
+12:15:41.713 [SimpleAsyncTaskExecutor-2] Request done in @Async: SimpleAsyncTaskExecutor-2
+
+-----------------------------------------------------------------------------
+12:17:21.783 [http-nio-9191-exec-1] Request received in controller thread:http-nio-9191-exec-1
+12:17:21.783 [http-nio-9191-exec-1] Request done in controller thread:http-nio-9191-exec-1
+12:17:21.783 [SimpleAsyncTaskExecutor-3] Request received in @Async : SimpleAsyncTaskExecutor-3
+12:17:21.783 [SimpleAsyncTaskExecutor-3] Start reversing string
+12:17:21.783 [SimpleAsyncTaskExecutor-3] Completed reversing string
+12:17:21.783 [SimpleAsyncTaskExecutor-3] Request done in @Async: SimpleAsyncTaskExecutor-3
+--------------------------------------------------------------------------------
+12:17:44.054 [http-nio-9191-exec-1] Request received in controller thread:http-nio-9191-exec-1
+12:17:44.055 [http-nio-9191-exec-1] Request done in controller thread:http-nio-9191-exec-1
+12:17:44.055 [SimpleAsyncTaskExecutor-4] Request received in @Async : SimpleAsyncTaskExecutor-4
+12:17:44.055 [ForkJoinPool.commonPool-worker-2] Start reversing string
+12:17:44.055 [ForkJoinPool.commonPool-worker-2] Completed reversing string
+12:17:44.055 [SimpleAsyncTaskExecutor-4] Request done in @Async: SimpleAsyncTaskExecutor-4

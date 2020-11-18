@@ -1,6 +1,7 @@
 package com.nickebbitt;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,20 +17,26 @@ import java.util.concurrent.ForkJoinPool;
 @Slf4j
 public class Application {
 
-    static final String RESULT = "Result";
+    static final String RESULT = "Output Result";
+
+    @Autowired
+    AsyncTest asyncTest;
 
     public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+
+        SpringApplication.run(Application.class, args);
 	}
 
     private String processRequest() {
-        log.info("Start processing request");
+        log.info("Start processing request.."+Thread.currentThread().getName());
+
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        log.info("Completed processing request");
+
+        log.info("Completed processing request..."+Thread.currentThread().getName());
         return RESULT;
     }
 
@@ -49,43 +56,67 @@ public class Application {
 
     }
 
-    @RequestMapping(path = "/asyncDeferred", method = RequestMethod.GET)
-    public DeferredResult<String> getValueAsyncUsingDeferredResult() {
-
-        log.info("Request received");
-
-        DeferredResult<String> deferredResult = new DeferredResult<>();
-
-        ForkJoinPool.commonPool()
-                .submit(() -> deferredResult.setResult(processRequest()));
-
-        log.info("Servlet thread released");
-
-        return deferredResult;
-
-    }
 
     @RequestMapping(path = "/asyncCompletable", method = RequestMethod.GET)
     public CompletableFuture<String> getValueAsyncUsingCompletableFuture() {
-
-        log.info("Request received");
-
-        CompletableFuture<String> completableFuture
-                = CompletableFuture.supplyAsync(this::processRequest);
-
-        log.info("Servlet thread released");
-
-        return completableFuture;
-
+        log.info("Request received"+Thread.currentThread().getName());
+        CompletableFuture<String> future = CompletableFuture.completedFuture(processRequest());
+        future.join();
+        return future;
+        //log.info("Servlet thread released");
+        //return completableFuture;
     }
 
     @RequestMapping(path = "/asyncCompletableComposed", method = RequestMethod.GET)
     public CompletableFuture<String> getValueAsyncUsingCompletableFutureComposed() {
+        log.info("Request received"+Thread.currentThread().getName());
 
-        return CompletableFuture
-                .supplyAsync(this::processRequest)
-                .thenApplyAsync(this::reverseString);
+       // CompletableFuture<String> stringCompletableFuture =
+        CompletableFuture<String> future = CompletableFuture
+                .supplyAsync(this::processRequest);
+        future.join();
+        return future;
+        //.thenApplyAsync(this::reverseString);
 
+//        log.info("Servlet thread released");
+//
+//        return stringCompletableFuture;
+
+    }
+
+
+    @RequestMapping(path = "/processCompletedFutureWithJoin", method = RequestMethod.GET)
+    public CompletableFuture<String> processCompletedFuture() {
+        log.info("Request received in controller thread:" + Thread.currentThread().getName());
+        CompletableFuture<String> futureResult = asyncTest.processSupplyAsyncWithJoin();
+        log.info("Request done in controller thread:" + Thread.currentThread().getName());
+        return futureResult;
+
+    }
+
+    @RequestMapping(path = "/processSupplyAsyncWithJoin", method = RequestMethod.GET)
+    public CompletableFuture<String> processSupplyAsync() {
+        log.info("Request received in controller thread:" + Thread.currentThread().getName());
+        CompletableFuture<String> futureResult = asyncTest.processSupplyAsyncWithJoin();
+        log.info("Request done in controller thread:" + Thread.currentThread().getName());
+        return futureResult;
+    }
+
+    @RequestMapping(path = "/processCompletedFutureNoJoin", method = RequestMethod.GET)
+    public CompletableFuture<String> processCompletedFutureNoJoin() {
+        log.info("Request received in controller thread:" + Thread.currentThread().getName());
+        CompletableFuture<String> futureResult = asyncTest.processCompletedFutureWithoutJoin();
+        log.info("Request done in controller thread:" + Thread.currentThread().getName());
+        return futureResult;
+
+    }
+
+    @RequestMapping(path = "/processSupplyAsyncNoJoin", method = RequestMethod.GET)
+    public CompletableFuture<String> processSupplyAsyncNoJoin() {
+        log.info("Request received in controller thread:" + Thread.currentThread().getName());
+        CompletableFuture<String> futureResult = asyncTest.processSupplyAsyncWithoutJoin();
+        log.info("Request done in controller thread:" + Thread.currentThread().getName());
+        return futureResult;
     }
 
 }
